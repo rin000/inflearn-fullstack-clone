@@ -8,7 +8,7 @@ const queryClient = new QueryClient();
 export default function Providers({ children }: React.PropsWithChildren) {
   return (
     <JotaiProvider>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </JotaiProvider>
   );
 }
