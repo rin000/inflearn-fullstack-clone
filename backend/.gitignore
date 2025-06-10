@@ -54,8 +54,5 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-<<<<<<< HEAD
 
 generated/
-=======
->>>>>>> 1ba154e786fd56397c565bf27e6e97caeeff4dbd
