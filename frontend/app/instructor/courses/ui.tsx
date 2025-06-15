@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Table,
@@ -7,12 +7,12 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Pencil, X } from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Course } from "@/generated/openapi-client";
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Pencil, X } from 'lucide-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { Course } from '@/generated/openapi-client';
 
 export default function UI({ courses }: { courses: Course[] }) {
   const router = useRouter();
@@ -44,12 +44,12 @@ export default function UI({ courses }: { courses: Course[] }) {
               const discountPrice = course.discountPrice;
               const totalRevenue = 0;
               const status =
-                course.status === "PUBLISHED" ? "게시중" : "임시저장";
+                course.status === 'PUBLISHED' ? '게시중' : '임시저장';
               return (
                 <TableRow key={course.id}>
                   <TableCell>
                     <Image
-                      src={course.thumbnailUrl || "/logo/inflearn.png"}
+                      src={course.thumbnailUrl || '/logo/inflearn.png'}
                       alt={course.title}
                       width={80}
                       height={80}
@@ -73,7 +73,7 @@ export default function UI({ courses }: { courses: Course[] }) {
                     ) : price ? (
                       `₩${price.toLocaleString()}`
                     ) : (
-                      "미설정"
+                      '미설정'
                     )}
                   </TableCell>
                   <TableCell>₩{totalRevenue.toLocaleString()}</TableCell>
@@ -82,7 +82,7 @@ export default function UI({ courses }: { courses: Course[] }) {
                     <Button
                       onClick={() => {
                         const confirmed =
-                          window.confirm("정말 삭제하시겠습니까?");
+                          window.confirm('정말 삭제하시겠습니까?');
                         console.log(confirmed);
                       }}
                       variant="destructive"
