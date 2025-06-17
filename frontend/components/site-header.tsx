@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { CourseCategory } from "@/generated/openapi-client";
-import { Layers, Search } from "lucide-react";
-import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { CourseCategory } from '@/generated/openapi-client';
+import { Layers, Search } from 'lucide-react';
+import Link from 'next/link';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 export default function SiteHeader({
   categories,
@@ -15,7 +15,10 @@ export default function SiteHeader({
   categories: CourseCategory[];
 }) {
   const pathname = usePathname();
-  const isCategoryNeeded = pathname == "/" || pathname.includes("/courses");
+  const isSiteHeaderNeeded = !pathname.includes('/course/');
+  const isCategoryNeeded = pathname == '/' || pathname.includes('/courses');
+
+  if (!isSiteHeaderNeeded) return null;
 
   return (
     <header className="site-header w-full border-b bg-white">
