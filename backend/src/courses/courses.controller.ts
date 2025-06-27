@@ -99,8 +99,34 @@ export class CoursesController {
     @Query('include') include?: string,
   ) {
     const includeArray = include ? include.split(',') : undefined;
+    let includeObject: Prisma.CourseInclude;
 
-    return this.coursesService.findOne(id, includeArray);
+    if (
+      includeArray?.includes('sections') &&
+      includeArray.includes('lectures')
+    ) {
+      const otherInclude = includeArray.filter(
+        (item) => !['sections', 'lectures'].includes(item),
+      );
+      const includeObject = {
+        sections: {
+          include: {
+            lectures: true,
+          },
+        },
+        ...otherInclude.map((item) => ({
+          [item]: true,
+        })),
+      };
+    } else {
+      includeObject = {
+        ...includeArray.map((item) => ({
+          [item]: true,
+        })),
+      } as Prisma.CourseInclude;
+    }
+
+    return this.coursesService.findOne(id, includeObject);
   }
 
   @Patch(':id')

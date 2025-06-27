@@ -55,7 +55,7 @@ export class LecturesController {
   @UseGuards(AccessTokenGuard)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '개별 강의 상세 정보' })
-  @ApiParam({ name: 'sectionId', description: '개별 강의 ID' })
+  @ApiParam({ name: 'lectureId', description: '개별 강의 ID' })
   @ApiOkResponse({
     description: '개별 강의 상세 정보 조회',
     type: LectureEntity,
@@ -68,7 +68,7 @@ export class LecturesController {
   @UseGuards(AccessTokenGuard)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '개별 강의 수정' })
-  @ApiParam({ name: 'sectionId', description: '개별 강의 ID' })
+  @ApiParam({ name: 'lectureId', description: '개별 강의 ID' })
   @ApiBody({ type: UpdateLectureDto })
   @ApiOkResponse({
     description: '개별 강의 수정 성공',
@@ -90,7 +90,7 @@ export class LecturesController {
   @UseGuards(AccessTokenGuard)
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '개별 강의 삭제' })
-  @ApiParam({ name: 'sectionId', description: '개별 강의 ID' })
+  @ApiParam({ name: 'lectureId', description: '개별 강의 ID' })
   @ApiOkResponse({
     description: '개별 강의 삭제 성공',
     type: LectureEntity,
