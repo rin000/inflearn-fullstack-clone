@@ -1,4 +1,5 @@
-'use server';
+import { UpdateUserDto } from './../../backend/src/users/dto/update-user.dto';
+('use server');
 
 import {
   categoriesControllerFindAll,
@@ -15,6 +16,8 @@ import {
   sectionsControllerUpdate,
   UpdateCourseDto,
   UpdateLectureDto,
+  usersControllerGetProfile,
+  usersControllerUpdateProfile,
 } from '@/generated/openapi-client';
 
 export const getAllCategories = async () => {
@@ -175,6 +178,19 @@ export const uploadMedia = async (file: File) => {
     body: {
       file,
     },
+  });
+
+  return { data, error };
+};
+
+export const getProfile = async () => {
+  const { data, error } = await usersControllerGetProfile();
+  return { data, error };
+};
+
+export const updateProfile = async (updateUserDto: UpdateUserDto) => {
+  const { data, error } = await usersControllerUpdateProfile({
+    body: updateUserDto,
   });
 
   return { data, error };

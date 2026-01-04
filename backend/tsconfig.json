@@ -9,7 +9,7 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    /* 🛑 baseUrl을 삭제하여 6.0 요구 에러를 원천 차단합니다 */
+    /* baseUrl을 삭제하여 6.0 요구 에러를 원천 차단합니다 */
     /* "baseUrl": "./", */
 
     /* ✅ paths는 그대로 유지하되 앞에 ./를 붙여 상대 경로임을 명시합니다 */
@@ -17,7 +17,7 @@
       "src/*": ["./src/*"]
     },
 
-    /* 🛑 에러의 주범인 이 줄을 완전히 삭제하세요 */
+    /* 에러의 주범인 이 줄을 완전히 삭제하세요 */
     /* "ignoreDeprecations": "6.0", */
 
     "incremental": true,
