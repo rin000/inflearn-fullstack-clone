@@ -27,8 +27,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const profile = await api.getProfile();
-  const categories = await api.getAllCategories();
+  const [session, profile, categories] = await Promise.all([
+    auth(),
+    api.getProfile(),
+    api.getAllCategories(),
+  ]);
 
   return (
     <html lang="en">
@@ -38,6 +41,7 @@ export default async function RootLayout({
       >
         <Providers>
           <SiteHeader
+            session={session}
             profile={profile.data}
             categories={categories.data ?? []}
           />

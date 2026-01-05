@@ -1,32 +1,38 @@
 'use client';
 
-import { CourseCategory } from '@/generated/openapi-client';
-import { Layers, Search } from 'lucide-react';
+import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { Search } from 'lucide-react';
+import { Session, User } from 'next-auth';
+import { signOut } from 'next-auth/react';
+
+import { CourseCategory } from '@/generated/openapi-client';
+import { CATEGORY_ICONS } from '@/app/constants/category-icons';
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { User } from 'next-auth';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@radix-ui/react-popover';
-import { CATEGORY_ICONS } from '@/app/constants/category-icons';
-import React from 'react';
+} from '@/components/ui/popover';
 
 export default function SiteHeader({
+  session,
   profile,
   categories,
 }: {
+  session?: Session | null;
   profile?: User;
   categories: CourseCategory[];
 }) {
   const pathname = usePathname();
+
   const isSiteHeaderNeeded = !pathname.includes('/course/');
-  const isCategoryNeeded = pathname == '/' || pathname.includes('/courses');
+  const isCategoryNeeded = pathname === '/' || pathname.includes('/courses');
 
   if (!isSiteHeaderNeeded) return null;
 
@@ -46,22 +52,24 @@ export default function SiteHeader({
             />
           </Link>
         </div>
+
         {/* 네비게이션 */}
         <nav className="main-nav flex gap-6 text-base font-bold text-gray-700">
-          <Link href="#" className="hover:text-[#1dc078] transition-colors">
+          <Link href="#" className="hover:text-[#1dc078]">
             강의
           </Link>
-          <Link href="#" className="hover:text-[#1dc078] transition-colors">
+          <Link href="#" className="hover:text-[#1dc078]">
             로드맵
           </Link>
-          <Link href="#" className="hover:text-[#1dc078] transition-colors">
+          <Link href="#" className="hover:text-[#1dc078]">
             멘토링
           </Link>
-          <Link href="#" className="hover:text-[#1dc078] transition-colors">
+          <Link href="#" className="hover:text-[#1dc078]">
             커뮤니티
           </Link>
         </nav>
-        {/* 검색창 + 아이콘 */}
+
+        {/* 검색 */}
         <div className="flex-1 flex justify-center">
           <div className="relative flex w-full max-w-xl items-center">
             <Input
@@ -71,14 +79,15 @@ export default function SiteHeader({
             />
             <button
               type="button"
-              className="absolute right-2 p-1 text-gray-400 hover:text-[#1dc078] transition-colors"
+              className="absolute right-2 p-1 text-gray-400 hover:text-[#1dc078]"
               tabIndex={-1}
             >
               <Search size={20} />
             </button>
           </div>
         </div>
-        {/* 지식공유자 버튼 */}
+
+        {/* 지식공유자 */}
         <Link href="/instructor">
           <Button
             variant="outline"
@@ -87,70 +96,91 @@ export default function SiteHeader({
             지식공유자
           </Button>
         </Link>
-        {/* Avatar */}
-        <Avatar className="ml-2">
-          <AvatarFallback>
-            <span role="img" aria-label="user">
-              👤
-            </span>
-          </AvatarFallback>
-        </Avatar>
-        <Popover>
-          <PopoverTrigger asChild>
-            <div className="ml-2 cursor-pointer">
-              <Avatar>
-                {profile?.image ? (
-                  <img
-                    src={profile.image}
-                    alt="avatar"
-                    className="w-full h-full object-cover rounded-full"
-                  />
-                ) : (
-                  <AvatarFallback>
-                    <span role="img" aria-label="user">
-                      👤
-                    </span>
-                  </AvatarFallback>
-                )}
-              </Avatar>
-            </div>
-          </PopoverTrigger>
-          <PopoverContent align="end" className="w-56 p-0">
-            <button
-              className="w-full text-left px-4 py-3 hover:bg-gray-100 focus:outline-none"
-              onClick={() => (window.location.href = '/my/settings/account')}
-            >
-              <div className="font-semibold text-gray-800">
-                {profile?.name || profile?.email || '내 계정'}
-              </div>
-            </button>
-          </PopoverContent>
-        </Popover>
-      </div>
-      {/* 하단 카테고리 */}
-      <div className="header-bottom bg-white px-8">
-        {isCategoryNeeded && (
-          <nav className="category-nav flex gap-6 py-4 overflow-x-auto scrollbar-none">
-            {categories.map((category) => (
-              <Link key={category.id} href={`/courses/${category.slug}`}>
-                <div className="category-item flex flex-col items-center min-w-[72px] text-gray-700 hover:text-[#1dc078] cursor-pointer transition-colors">
-                  {/* <Layers size={28} className="mb-1" /> */}
-                  {React.createElement(
-                    CATEGORY_ICONS[category.slug] || CATEGORY_ICONS['default'],
-                    {
-                      size: 28,
-                      className: 'mb-1',
-                    },
+
+        {/* 로그인 / 프로필 */}
+        {session ? (
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className="ml-2 cursor-pointer">
+                <Avatar>
+                  {profile?.image ? (
+                    <img
+                      src={profile.image}
+                      alt="avatar"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <AvatarFallback>
+                      <span role="img" aria-label="user">
+                        👤
+                      </span>
+                    </AvatarFallback>
                   )}
-                  <span className="text-xs font-medium whitespace-nowrap">
-                    {category.name}
-                  </span>
+                </Avatar>
+              </div>
+            </PopoverTrigger>
+
+            <PopoverContent align="end" className="w-56 p-0">
+              <div className="px-4 py-3 border-b border-gray-100">
+                <div className="font-semibold text-gray-800">
+                  {profile?.name || profile?.email || '내 계정'}
                 </div>
-              </Link>
-            ))}
-          </nav>
+                {profile?.email && (
+                  <div className="text-xs text-gray-500 mt-1">
+                    {profile.email}
+                  </div>
+                )}
+              </div>
+
+              <button
+                className="w-full text-left px-4 py-3 hover:bg-gray-100"
+                onClick={() => (window.location.href = '/my/settings/account')}
+              >
+                프로필 수정
+              </button>
+
+              <button
+                className="w-full text-left px-4 py-3 hover:bg-gray-100 border-t border-gray-100"
+                onClick={() => signOut()}
+              >
+                로그아웃
+              </button>
+            </PopoverContent>
+          </Popover>
+        ) : (
+          <Link href="/signin">
+            <Button
+              variant="outline"
+              className="font-semibold border-gray-200 hover:border-[#1dc078] hover:text-[#1dc078] ml-2"
+            >
+              로그인
+            </Button>
+          </Link>
         )}
       </div>
+
+      {/* 하단 카테고리 */}
+      {isCategoryNeeded && (
+        <div className="header-bottom bg-white px-8">
+          <nav className="category-nav flex gap-6 py-4 overflow-x-auto scrollbar-none">
+            {categories.map((category) => {
+              const Icon =
+                CATEGORY_ICONS[category.slug] || CATEGORY_ICONS['default'];
+
+              return (
+                <Link key={category.id} href={`/courses/${category.slug}`}>
+                  <div className="flex flex-col items-center min-w-[72px] text-gray-700 hover:text-[#1dc078]">
+                    <Icon size={28} className="mb-1" />
+                    <span className="text-xs font-medium whitespace-nowrap">
+                      {category.name}
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

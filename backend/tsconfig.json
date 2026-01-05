@@ -24,5 +24,5 @@
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["src/**/*", "prisma/seed.ts"]
+  "include": ["src/**/*", "lib/**/*", "prisma/seed.ts"]
 }
